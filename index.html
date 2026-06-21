@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>手機上癮解套系統｜Phone Addiction Recovery OS</title>
+<style>
+:root{
+  --bg:#fff;--bg2:#f7f8fc;--bg3:#eef0f8;
+  --ink:#0d1626;--ink2:#2c3a56;--ink3:#677089;
+  --navy:#0f1d3e;--teal:#0d7d8c;--teal-l:#cdf0f3;
+  --gold:#b8860b;--gold-l:#fef6e3;
+  --green:#15803d;--green-l:#dcfce7;
+  --rose:#be123c;--rose-l:#ffe4e6;
+  --violet:#5b21b6;--violet-l:#ede9fe;
+  --blue:#1e40af;--blue-l:#dbeafe;
+  --amber:#b45309;--amber-l:#fef3c7;
+  --border:#dde2ef;--r:12px;
+  --sh:0 2px 12px rgba(13,22,38,.08);
+  --sh2:0 8px 32px rgba(13,22,38,.15);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:"Noto Sans TC","Microsoft JhengHei",Inter,system-ui,sans-serif;
+  background:var(--bg);color:var(--ink);font-size:15px;line-height:1.7}
+button{cursor:pointer;font:inherit;border:none;background:none}
+.nav{position:sticky;top:0;z-index:200;background:rgba(255,255,255,.95);
+  backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.nav-i{max-width:1400px;margin:auto;padding:0 20px;height:58px;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px}
+.logo-mark{width:34px;height:34px;border-radius:9px;
+  background:linear-gradient(135deg,#0f1d3e,#0d7d8c);
+  display:grid;place-items:center;font-size:17px}
+.logo-txt{font-weight:900;font-size:13px;color:var(--teal)}
+.nav-tabs{display:flex;gap:2px;flex-wrap:wrap}
+.ntab{padding:5px 9px;border-radius:7px;font-size:11px;font-weight:700;
+  color:var(--ink2);transition:.15s}
+.ntab:hover{background:var(--teal-l);color:var(--teal)}
+.hero{background:linear-gradient(140deg,#060e1a 0%,#0f1d3e 45%,#0d4a55 78%,#0d7d8c 100%);
+  color:#fff;padding:64px 24px 56px;text-align:center;position:relative;overflow:hidden}
+.hero::after{content:'';position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse at 20% 50%,rgba(13,125,140,.22),transparent 55%),
+             radial-gradient(ellipse at 80% 30%,rgba(190,18,60,.15),transparent 50%)}
+.h-badge{display:inline-block;padding:5px 14px;border-radius:999px;
+  font-size:11px;font-weight:900;letter-spacing:.06em;
+  border:1px solid rgba(255,255,255,.22);color:#7dd3fc;margin-bottom:18px}
+.hero h1{font-size:clamp(24px,4.6vw,48px);font-weight:900;line-height:1.2;margin-bottom:14px}
+.hero h1 .teal{color:#5eead4}
+.hero h1 .rose{color:#fda4af}
+.hero-sub{max-width:680px;margin:0 auto 20px;font-size:15px;color:#bfdbfe;line-height:1.9}
+.hero-eq{max-width:600px;margin:0 auto 24px;padding:16px 20px;
+  border-left:3px solid #fda4af;background:rgba(255,255,255,.05);
+  border-radius:0 10px 10px 0;text-align:left}
+.hero-eq .zh{color:#fecaca;font-size:14px;line-height:1.9;font-weight:700}
+.hero-eq .en{color:#fda4af;font-size:12px;font-style:italic;margin-top:4px}
+.hero-stats{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.hstat{padding:11px 16px;border-radius:12px;background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.15);text-align:center;min-width:88px}
+.hstat-n{font-size:20px;font-weight:900;color:#5eead4}
+.hstat-l{font-size:9px;color:#bfdbfe;margin-top:2px}
+.wrap{max-width:1400px;margin:0 auto;padding:0 20px}
+.sec{padding:48px 0 36px}
+.sh .etag{font-size:11px;font-weight:900;letter-spacing:.06em;color:var(--teal);margin-bottom:8px}
+.sh h2{font-size:clamp(19px,2.6vw,30px);font-weight:900;margin-bottom:6px}
+.sh .sub{font-size:13px;color:var(--rose);font-weight:700;margin-bottom:6px}
+.sh .sub-en{font-size:12px;color:var(--ink3);font-style:italic;margin-bottom:8px}
+.sh p{color:var(--ink2);font-size:13px;line-height:1.85;max-width:760px}
+.divider{height:1px;background:var(--border)}
+
+/* Perspective nav pills */
+.persp-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+.persp-card{padding:14px;border:2px solid var(--border);border-radius:var(--r);
+  background:var(--bg);cursor:pointer;transition:.15s;box-shadow:var(--sh);text-align:center}
+.persp-card:hover,.persp-card.sel{border-color:var(--teal);background:var(--teal-l);transform:translateY(-2px)}
+.pc-icon{font-size:22px;margin-bottom:4px}
+.pc-zh{font-size:13px;font-weight:800;color:var(--ink)}
+.pc-en{font-size:10px;color:var(--ink3);font-style:italic}
+
+.persp-panel{display:none;border:1px solid var(--border);border-radius:var(--r);
+  background:var(--bg);box-shadow:var(--sh2);overflow:hidden;margin-bottom:8px}
+.persp-panel.show{display:block}
+.pp-header{padding:22px 26px 16px;border-bottom:1px solid var(--border);
+  background:linear-gradient(135deg,var(--bg2),#fff)}
+.pp-title{font-size:20px;font-weight:900;color:var(--navy);margin-bottom:2px}
+.pp-en{font-size:13px;color:var(--ink3);font-style:italic}
+.pp-ph{font-size:10px;color:var(--teal);font-family:monospace;margin-top:2px}
+.pp-subtitle{margin-top:10px;font-size:14px;font-weight:800;color:var(--rose)}
+.pp-subtitle-en{font-size:12px;color:var(--ink3);font-style:italic}
+.pp-intro{margin-top:12px;padding:12px 16px;border-radius:9px;background:var(--gold-l);
+  border-left:3px solid var(--gold);font-size:13px;color:var(--ink2);line-height:1.85}
+.pp-intro .en{color:var(--gold);font-size:12px;margin-top:6px;font-style:italic}
+.pp-body{padding:22px 26px}
+
+.item-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.item-card{padding:12px;border-radius:10px;background:var(--bg2);
+  border:1.5px solid var(--border);cursor:pointer;transition:.15s}
+.item-card:hover,.item-card.open{border-color:var(--teal);background:var(--teal-l)}
+.ic-zh{font-size:13px;font-weight:800;color:var(--ink)}
+.ic-en{font-size:11px;color:var(--teal);margin-top:2px}
+.ic-ph{font-size:9px;color:var(--ink3);font-family:monospace;margin-top:2px}
+.ic-note{display:none;margin-top:8px;padding:8px;border-radius:6px;background:#fff;
+  font-size:11px;color:var(--ink2);line-height:1.6;border:1px solid var(--teal-l)}
+.ic-note .en{color:var(--teal);margin-top:4px;font-style:italic}
+.item-card.open .ic-note{display:block}
+.speak-btn{font-size:12px;cursor:pointer;padding:2px 6px;border-radius:5px;
+  background:var(--blue-l);color:var(--blue);border:none;font-family:inherit;
+  transition:.12s;margin-top:6px;display:inline-block}
+.speak-btn:hover{background:var(--blue);color:#fff}
+
+/* Flow chain visualizations */
+.flow-chain{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px;padding:20px 0}
+.fc-step{padding:12px 18px;border-radius:12px;background:var(--bg2);
+  border:2px solid var(--teal);text-align:center;min-width:100px}
+.fc-zh{font-size:13px;font-weight:800;color:var(--ink)}
+.fc-en{font-size:10px;color:var(--teal);margin-top:2px}
+.fc-ph{font-size:9px;color:var(--ink3);font-family:monospace;margin-top:2px}
+.fc-explain{font-size:10px;color:var(--ink2);margin-top:6px;max-width:140px;line-height:1.5}
+.fc-arrow{font-size:20px;color:var(--rose);font-weight:900}
+.fc-step.final{border-color:var(--rose);background:var(--rose-l)}
+
+.pair-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:16px 0}
+.pair-card{display:flex;align-items:center;gap:12px;padding:12px 16px;
+  border-radius:10px;background:var(--bg2);border:1.5px solid var(--border)}
+.pair-trigger{font-size:13px;font-weight:800;color:var(--rose);min-width:80px}
+.pair-arrow{color:var(--ink3)}
+.pair-action{font-size:13px;font-weight:800;color:var(--teal)}
+
+.key-insight{margin-top:18px;padding:16px 18px;border-radius:10px;background:var(--violet-l);
+  border-left:3px solid var(--violet)}
+.key-insight .label{font-size:11px;font-weight:900;color:var(--violet);margin-bottom:6px}
+.key-insight .zh{font-size:13px;color:var(--ink2);line-height:1.85}
+.key-insight .en{font-size:12px;color:var(--violet);margin-top:8px;line-height:1.7;font-style:italic}
+
+/* Game theory VS layout */
+.vs-layout{display:flex;align-items:center;justify-content:center;gap:20px;flex-wrap:wrap;padding:20px 0}
+.vs-left{padding:20px 28px;border-radius:14px;background:var(--blue-l);
+  border:2px solid var(--blue);text-align:center}
+.vs-left .icon{font-size:32px}
+.vs-left .zh{font-size:15px;font-weight:900;color:var(--blue);margin-top:6px}
+.vs-mid{font-size:24px;font-weight:900;color:var(--rose)}
+.vs-right{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.vs-item{padding:10px 14px;border-radius:9px;background:var(--rose-l);
+  border:1.5px solid var(--rose);font-size:12px;font-weight:800;color:var(--rose);text-align:center}
+
+/* Complex system web */
+.web-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.web-item{padding:10px;border-radius:9px;background:var(--bg3);
+  border:1.5px solid var(--border);text-align:center;font-size:12px;font-weight:700}
+.web-item .en{font-size:10px;color:var(--teal);display:block;margin-top:2px}
+
+/* Solutions */
+.strat-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px}
+.strat-tab{padding:10px 16px;border-radius:10px;border:2px solid var(--border);
+  background:var(--bg2);font-size:13px;font-weight:800;cursor:pointer;transition:.15s}
+.strat-tab:hover,.strat-tab.act{border-color:var(--green);background:var(--green-l);color:var(--green)}
+.strat-content{display:none}
+.strat-content.show{display:block}
+.strat-logic{padding:14px 16px;border-radius:9px;background:var(--amber-l);
+  border-left:3px solid var(--amber);font-size:13px;color:var(--ink2);margin-bottom:16px;line-height:1.85}
+.strat-logic .en{color:var(--amber);font-size:12px;margin-top:6px;font-style:italic}
+.sub-item-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.sub-item-card{padding:14px 16px;border-radius:10px;background:var(--bg2);
+  border:1.5px solid var(--border)}
+.sub-item-zh{font-size:14px;font-weight:800;color:var(--ink)}
+.sub-item-en{font-size:12px;color:var(--green);margin-top:2px}
+.sub-item-ph{font-size:10px;color:var(--ink3);font-family:monospace;margin-top:2px}
+.sub-item-how{font-size:12px;color:var(--ink2);margin-top:8px;line-height:1.7;
+  padding-top:8px;border-top:1px solid var(--border)}
+.sub-item-how .en{color:var(--green);font-style:italic;margin-top:4px}
+
+/* 10 strategies table */
+.strat10-list{display:grid;gap:8px}
+.strat10-item{display:grid;grid-template-columns:36px 1fr;gap:14px;padding:14px 16px;
+  border-radius:10px;background:var(--bg2);border-left:3px solid var(--green);align-items:start}
+.s10-num{width:32px;height:32px;border-radius:50%;background:var(--green);color:#fff;
+  font-weight:900;display:grid;place-items:center;font-size:13px}
+.s10-zh{font-size:14px;font-weight:800;color:var(--ink)}
+.s10-en{font-size:12px;color:var(--green);margin-top:2px}
+.s10-ph{font-size:10px;color:var(--ink3);font-family:monospace;margin-top:2px}
+.s10-cat{display:inline-block;margin-top:6px;padding:2px 10px;border-radius:999px;
+  background:var(--teal-l);color:var(--teal);font-size:10px;font-weight:800}
+.s10-why{font-size:12px;color:var(--ink2);margin-top:8px;line-height:1.7}
+.s10-why .en{color:var(--ink3);font-style:italic;margin-top:3px}
+
+/* 10 quotes */
+.quote10-list{display:grid;gap:10px}
+.quote10-item{display:flex;gap:14px;align-items:flex-start;padding:16px 18px;
+  border-radius:10px;background:var(--violet-l);border-left:3px solid var(--violet);cursor:pointer;transition:.12s}
+.quote10-item:hover{background:#e0d4fa}
+.q10-num{font-size:13px;font-weight:900;color:var(--violet);min-width:28px}
+.q10-zh{font-size:15px;font-weight:800;color:var(--ink);line-height:1.6}
+.q10-en{font-size:13px;color:var(--violet);margin-top:6px;line-height:1.6}
+.q10-ph{font-size:10px;color:var(--ink3);font-family:monospace;margin-top:4px}
+
+/* Summary equation */
+.eq-box{padding:24px;border-radius:14px;background:var(--bg2);border:2px solid var(--border);
+  text-align:center;margin-bottom:20px}
+.eq-wrong{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;margin-bottom:18px}
+.eq-tag{padding:10px 18px;border-radius:10px;background:var(--rose-l);color:var(--rose);
+  font-weight:900;font-size:14px}
+.eq-tag.alt{background:var(--bg3);color:var(--ink3)}
+.eq-sym{font-size:22px;font-weight:900;color:var(--ink3)}
+.eq-main{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap}
+.eq-tag.primary{background:var(--teal-l);color:var(--teal)}
+.eq-components{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:18px auto;max-width:680px}
+.eq-comp{padding:10px 14px;border-radius:9px;background:var(--amber-l);color:var(--amber);
+  font-size:12px;font-weight:800;text-align:center}
+.eq-comp .en{display:block;font-size:10px;font-style:italic;font-weight:400;margin-top:2px}
+.solution-chain{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px;margin-top:18px}
+.sc-step{padding:10px 16px;border-radius:999px;background:var(--green-l);color:var(--green);
+  font-weight:800;font-size:13px}
+.sc-step .en{display:block;font-size:10px;font-style:italic;font-weight:400}
+
+.closing-box{margin-top:20px;padding:18px 22px;border-radius:12px;background:var(--navy);color:#fff;
+  text-align:center;line-height:1.9}
+.closing-box .en{color:#a7f3d0;font-size:13px;margin-top:8px;font-style:italic}
+
+/* Classroom edition */
+.chain-blocks{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;margin:16px 0}
+.cb-block{padding:12px 20px;border-radius:10px;background:var(--bg2);border:1.5px solid var(--border);
+  font-size:14px;font-weight:800;text-align:center}
+.cb-block .en{font-size:11px;color:var(--teal);font-style:italic;display:block;margin-top:2px}
+.principle-list{display:grid;gap:10px;margin:16px 0}
+.principle-item{padding:14px 18px;border-radius:10px;background:var(--gold-l);border-left:3px solid var(--gold)}
+.principle-item .zh{font-size:14px;font-weight:800;color:var(--ink)}
+.principle-item .en{font-size:12px;color:var(--gold);margin-top:4px;font-style:italic}
+.principle-item .ph{font-size:10px;color:var(--ink3);font-family:monospace;margin-top:3px}
+
+/* CTA */
+.cta-sec{padding:56px 24px;
+  background:linear-gradient(140deg,#060e1a,#0f1d3e,#0d4a55,#0d7d8c);
+  color:#fff;text-align:center}
+.cta-sec h2{font-size:clamp(19px,3.2vw,32px);font-weight:900;margin-bottom:14px}
+.cta-body{max-width:580px;margin:0 auto 22px;font-size:13px;color:#a7f3d0;line-height:1.95}
+
+@media(max-width:900px){
+  .persp-grid{grid-template-columns:repeat(2,1fr)}
+  .item-grid{grid-template-columns:repeat(2,1fr)}
+  .web-grid{grid-template-columns:repeat(3,1fr)}
+  .sub-item-grid{grid-template-columns:1fr}
+  .vs-right{grid-template-columns:repeat(2,1fr)}
+  .eq-components{grid-template-columns:repeat(2,1fr)}
+  .pair-grid{grid-template-columns:1fr}
+}
+@media(max-width:600px){
+  .persp-grid{grid-template-columns:repeat(2,1fr)}
+  .item-grid{grid-template-columns:1fr}
+  .web-grid{grid-template-columns:repeat(2,1fr)}
+  .strat10-item{grid-template-columns:28px 1fr}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-i">
+    <div class="logo">
+      <div class="logo-mark">📵</div>
+      <div class="logo-txt">手機上癮解套系統｜Recovery OS</div>
+    </div>
+    <div class="nav-tabs">
+      <button class="ntab" onclick="go('#perspectives')">11個視角</button>
+      <button class="ntab" onclick="go('#solutions')">解決方案</button>
+      <button class="ntab" onclick="go('#strategies')">10大策略</button>
+      <button class="ntab" onclick="go('#quotes')">10大金句</button>
+      <button class="ntab" onclick="go('#summary')">建模總結</button>
+      <button class="ntab" onclick="go('#classroom')">班級經營版</button>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="h-badge">PHONE ADDICTION RECOVERY OS · 高中生手機上癮系統解套</div>
+  <h1>手機上癮 <span class="rose">≠</span> 手機問題<br><span class="teal">這是一個人生目標問題</span></h1>
+  <p class="hero-sub">
+    從表面現象一路挖到根源系統：多巴胺迴路、預測編碼、自由能、賽局理論。<br>
+    11個視角 × 4大解決策略 × 10個策略 × 10句金句，全部雙語呈現，英文可以點擊發音。
+  </p>
+  <div class="hero-eq">
+    <p class="zh">目標越模糊，手機越重要。目標越清楚，手機越不重要。</p>
+    <p class="en">The blurrier your goal, the more the phone matters. The clearer your goal, the less it does.</p>
+  </div>
+  <div class="hero-stats">
+    <div class="hstat"><div class="hstat-n">11</div><div class="hstat-l">分析視角</div></div>
+    <div class="hstat"><div class="hstat-n">4</div><div class="hstat-l">解決策略</div></div>
+    <div class="hstat"><div class="hstat-n">10</div><div class="hstat-l">行動策略</div></div>
+    <div class="hstat"><div class="hstat-n">10</div><div class="hstat-l">金句</div></div>
+  </div>
+</section>
+
+<div class="wrap">
+
+  <section class="sec" id="perspectives">
+    <div class="sh">
+      <div class="etag">11 PERSPECTIVES · 從現象到根源的完整地圖</div>
+      <h2>為什麼戒手機這麼難？因為你只看到了冰山一角</h2>
+      <p>點選任一視角，看見完整的雙語深度解析。從表面現象開始，一路挖到多巴胺迴路、預測編碼、自由能原理、賽局理論——每一層都比上一層更接近真正的答案。</p>
+    </div>
+    <div class="persp-grid" id="persp-grid"></div>
+    <div class="persp-panel" id="persp-panel"></div>
+  </section>
+  <div class="divider"></div>
+
+  <section class="sec" id="solutions">
+    <div class="sh">
+      <div class="etag">THE SOLUTION · 四面包抄</div>
+      <h2 id="sol-title"></h2>
+      <p id="sol-intro"></p>
+    </div>
+    <div class="strat-tabs" id="strat-tabs"></div>
+    <div id="strat-contents"></div>
+  </section>
+  <div class="divider"></div>
+
+  <section class="sec" id="strategies">
+    <div class="sh">
+      <div class="etag">TOP 10 STRATEGIES · 10大行動策略</div>
+      <h2>不用全部都做，先挑3個開始</h2>
+      <p>每個策略都標註屬於哪個解決方向，附上「為什麼有效」的科學邏輯。</p>
+    </div>
+    <div class="strat10-list" id="strat10-list"></div>
+  </section>
+  <div class="divider"></div>
+
+  <section class="sec" id="quotes">
+    <div class="sh">
+      <div class="etag">TOP 10 QUOTES · 10句最有說服力的金句</div>
+      <h2>點擊任一句，聽英文怎麼說</h2>
+      <p>這些句子設計給高中生看——不是說教，是說真話。</p>
+    </div>
+    <div class="quote10-list" id="quote10-list"></div>
+  </section>
+  <div class="divider"></div>
+
+  <section class="sec" id="summary">
+    <div class="sh">
+      <div class="etag">MASTER SUMMARY · 建模大師總結</div>
+      <h2 id="summary-title"></h2>
+    </div>
+    <div id="summary-content"></div>
+  </section>
+  <div class="divider"></div>
+
+  <section class="sec" id="classroom">
+    <div class="sh">
+      <div class="etag">CLASSROOM EDITION · 國潮班級經營版</div>
+      <h2 id="classroom-title"></h2>
+      <p id="classroom-sub"></p>
+    </div>
+    <div id="classroom-content"></div>
+  </section>
+
+</div>
+
+<section class="cta-sec">
+  <div class="wrap">
+    <h2>📵 手機管理 = 建立夢想 + 建立成就 + 建立歸屬 + 建立系統</h2>
+    <p class="cta-body">
+      Managing your phone = Building a dream + Building achievement + Building belonging + Building a system<br><br>
+      看見未來的人，會開始管理自己的注意力。
+    </p>
+  </div>
+</section>
+
+<script>
+const PERSP1 = [{"id": "surface", "icon": "📱", "zh": "表面現象", "en": "Surface Symptoms", "phonetic": "/ˈsɜːrfɪs ˈsɪmptəmz/", "subtitle_zh": "你看到的，只是冰山一角", "subtitle_en": "What you see is just the tip of the iceberg", "intro_zh": "老師、家長最常看到的就是這8個現象，但這些都只是「結果」，不是「原因」。如果只處理現象，手機拿走了，問題還是在，因為根源沒有被解決。", "intro_en": "These are the 8 things teachers and parents notice first — but they're all results, not causes. Take away the phone and the problem stays, because the root was never touched.", "items": [{"zh": "一直滑手機", "en": "Constant scrolling", "phonetic": "/ˈkɒnstənt ˈskroʊlɪŋ/", "note_zh": "手指比腦袋先做決定，已經變成反射動作", "note_en": "The thumb decides before the brain does"}, {"zh": "熬夜", "en": "Staying up all night", "phonetic": "/ˈsteɪɪŋ ʌp ɔːl naɪt/", "note_zh": "不是不想睡，是大腦還在等下一條通知", "note_en": "It's not that you don't want sleep — your brain is still waiting for the next notification"}, {"zh": "上課分心", "en": "Distracted in class", "phonetic": "/dɪˈstræktɪd ɪn klæs/", "note_zh": "口袋裡的手機比黑板上的公式更會發光", "note_en": "The phone in your pocket glows brighter than the formula on the board"}, {"zh": "不想讀書", "en": "No desire to study", "phonetic": "/noʊ dɪˈzaɪər tə ˈstʌdi/", "note_zh": "讀書的回饋要等很久，手機的回饋只要0.3秒", "note_en": "Studying pays off slowly. The phone pays off in 0.3 seconds"}, {"zh": "成績下降", "en": "Grades dropping", "phonetic": "/ɡreɪdz ˈdrɒpɪŋ/", "note_zh": "專注力被切成碎片，沒有完整的腦力留給考試", "note_en": "Attention gets shredded — none is left for the exam"}, {"zh": "情緒暴躁", "en": "Irritability", "phonetic": "/ɪˌrɪtəˈbɪlɪti/", "note_zh": "手機被拿走時的那種抓狂，是戒斷反應，不是任性", "note_en": "The meltdown when the phone is taken away is withdrawal, not just attitude"}, {"zh": "拖延嚴重", "en": "Severe procrastination", "phonetic": "/sɪˈvɪər prəˌkræstɪˈneɪʃən/", "note_zh": "「等一下再做」永遠等不到那個「一下」", "note_en": "'I'll do it in a minute' — that minute never comes"}, {"zh": "專注力下降", "en": "Shrinking attention span", "phonetic": "/ˈʃrɪŋkɪŋ əˈtenʃən spæn/", "note_zh": "大腦被訓練成只能接受15秒的刺激", "note_en": "The brain gets trained to only handle 15-second bursts"}]}, {"id": "system", "icon": "⚙️", "zh": "系統視角", "en": "Systems View", "phonetic": "/ˈsɪstəmz vjuː/", "subtitle_zh": "往下挖一層，找到驅動現象的引擎", "subtitle_en": "Dig one layer deeper to find the engine behind the symptoms", "intro_zh": "表面現象背後，有一個系統在運作。睡眠不足、壓力、缺乏成就感⋯⋯這些是「為什麼手機這麼好滑」的真正答案。", "intro_en": "Behind every symptom, a system is running. Lack of sleep, stress, low sense of achievement — these are the real reasons the phone feels so good to scroll.", "items": [{"zh": "睡眠不足", "en": "Sleep deprivation", "phonetic": "/sliːp ˌdeprɪˈveɪʃən/", "note_zh": "越累的大腦越沒有意志力抵抗手機", "note_en": "The more exhausted the brain, the less willpower it has to resist"}, {"zh": "壓力過大", "en": "Excessive stress", "phonetic": "/ɪkˈsesɪv stres/", "note_zh": "手機是最快的「假性減壓」工具", "note_en": "The phone is the fastest form of fake stress relief"}, {"zh": "成就感不足", "en": "Lack of accomplishment", "phonetic": "/læk əv əˌkɒmplɪʃˈmənt/", "note_zh": "現實世界給不出的成就感，遊戲裡30秒就有", "note_en": "What real life withholds, a game hands you in 30 seconds"}, {"zh": "未來不清楚", "en": "Unclear future", "phonetic": "/ʌnˈklɪər ˈfjuːtʃər/", "note_zh": "看不到終點的人，最容易躲進當下的快樂", "note_en": "When you can't see the finish line, you hide in instant pleasure"}, {"zh": "缺乏目標", "en": "Lack of goals", "phonetic": "/læk əv ɡoʊlz/", "note_zh": "沒有目標的時間，會自動被手機填滿", "note_en": "Time without a goal gets filled by the phone automatically"}, {"zh": "社交需求", "en": "Social needs", "phonetic": "/ˈsoʊʃəl niːdz/", "note_zh": "想被朋友看見、想知道大家在聊什麼", "note_en": "Wanting to be seen by friends, wanting to know what everyone's talking about"}, {"zh": "情緒問題", "en": "Emotional struggles", "phonetic": "/ɪˈmoʊʃənəl ˈstrʌɡəlz/", "note_zh": "不知道怎麼處理的情緒，最後都交給螢幕", "note_en": "Emotions you don't know how to process get handed to the screen instead"}, {"zh": "環境誘惑", "en": "Environmental temptation", "phonetic": "/ɪnˌvaɪrənˈmentəl tempˈteɪʃən/", "note_zh": "手機就放在手邊，意志力打不過距離為零的誘惑", "note_en": "The phone is right there — willpower never beats zero-distance temptation"}]}, {"id": "root", "icon": "🌱", "zh": "根源視角", "en": "Root Cause View", "phonetic": "/ruːt kɔːz vjuː/", "subtitle_zh": "再往下挖一層，這才是真正的戰場", "subtitle_en": "Dig one more layer — this is the real battlefield", "intro_zh": "如果系統視角是「為什麼手機這麼好滑」，根源視角就是「為什麼現實世界輸給了手機」。答案幾乎都指向同一件事：現實世界沒有提供足夠的心理養分。", "intro_en": "If the systems view asks 'why is the phone so satisfying,' the root cause view asks 'why does real life lose to the phone.' The answer almost always points to one thing: real life isn't supplying enough psychological nourishment.", "items": [{"zh": "現實世界不好玩", "en": "Real life feels boring", "phonetic": "/riːl laɪf fiːlz ˈbɔːrɪŋ/", "note_zh": "手機的世界是被設計過的，現實世界沒有人在幫你設計樂趣", "note_en": "The phone's world is engineered for fun. Nobody engineered real life that way"}, {"zh": "學習挫折", "en": "Learning setbacks", "phonetic": "/ˈlɜːrnɪŋ ˈsetbæks/", "note_zh": "一直學不會的科目，會讓人本能地逃向能贏的地方", "note_en": "A subject you keep failing pushes you toward somewhere you can actually win"}, {"zh": "缺乏掌控感", "en": "Lack of control", "phonetic": "/læk əv kənˈtroʊl/", "note_zh": "現實世界很多事不能選，手機裡你可以決定看什麼、滑多久", "note_en": "Real life offers few choices. On the phone, you decide what and how long"}, {"zh": "缺乏成就感", "en": "Lack of achievement", "phonetic": "/læk əv əˈtʃiːvmənt/", "note_zh": "現實的成就要等好幾個月，手機裡的成就馬上兌現", "note_en": "Real achievement takes months. Phone achievement cashes out instantly"}, {"zh": "缺乏認同感", "en": "Lack of recognition", "phonetic": "/læk əv ˌrekəɡˈnɪʃən/", "note_zh": "按讚數比考試分數更快給你一個「你很棒」的訊號", "note_en": "A like count tells you 'you're great' faster than any test score"}, {"zh": "缺乏歸屬感", "en": "Lack of belonging", "phonetic": "/læk əv bɪˈlɒŋɪŋ/", "note_zh": "群組裡的迷因比教室裡的座位更讓人感覺被接納", "note_en": "A meme in the group chat can feel more inclusive than a seat in the classroom"}, {"zh": "缺乏希望感", "en": "Lack of hope", "phonetic": "/læk əv hoʊp/", "note_zh": "看不到未來會更好的人，更容易活在「現在爽就好」", "note_en": "If you can't picture a better future, 'feel good now' becomes the whole plan"}, {"zh": "缺乏未來感", "en": "Lack of a sense of future", "phonetic": "/læk əv ə sens əv ˈfjuːtʃər/", "note_zh": "沒有清楚的未來藍圖，大腦就不會為了未來犧牲現在", "note_en": "Without a clear future blueprint, the brain won't sacrifice now for later"}]}, {"id": "human_needs", "icon": "❤️", "zh": "人性需求", "en": "Human Needs", "phonetic": "/ˈhjuːmən niːdz/", "subtitle_zh": "手機從來不是問題，需求才是問題", "subtitle_en": "The phone was never the problem — the need underneath is", "intro_zh": "人類有8種底層心理需求，手機把這8種需求全部打包，用最低成本、最快速度滿足你。這就是為什麼戒手機這麼難——你不是在跟一個產品競爭，是在跟人性競爭。", "intro_en": "Humans have 8 deep psychological needs. The phone bundles all 8 and satisfies them at the lowest cost, at top speed. That's why quitting is so hard — you're not competing with a product, you're competing with human nature itself.", "items": [{"zh": "安全感", "en": "Security", "phonetic": "/sɪˈkjʊərɪti/", "note_zh": "手機讓你隨時知道外面發生什麼事，降低不確定的恐懼", "note_en": "The phone lets you always know what's happening, lowering the fear of uncertainty"}, {"zh": "歸屬感", "en": "Belonging", "phonetic": "/bɪˈlɒŋɪŋ/", "note_zh": "群組訊息一響，就代表「我還在這個圈子裡」", "note_en": "Every group ping says 'I'm still part of this circle'"}, {"zh": "認同感", "en": "Validation", "phonetic": "/ˌvælɪˈdeɪʃən/", "note_zh": "按讚跟留言給你一種「我被看見了」的證明", "note_en": "Likes and comments are proof that 'I was seen'"}, {"zh": "成就感", "en": "Achievement", "phonetic": "/əˈtʃiːvmənt/", "note_zh": "遊戲裡每一關都設計成你「剛好能贏」，現實世界沒有這麼貼心", "note_en": "Every game level is designed so you can 'just barely win.' Real life isn't that considerate"}, {"zh": "新鮮感", "en": "Novelty", "phonetic": "/ˈnɒvəlti/", "note_zh": "下一條影片永遠是新的，大腦對「新」沒有抵抗力", "note_en": "The next video is always new — the brain can't resist novelty"}, {"zh": "刺激感", "en": "Stimulation", "phonetic": "/ˌstɪmjəˈleɪʃən/", "note_zh": "短影音的剪輯節奏比現實世界快10倍，大腦會被馴化成只認快節奏", "note_en": "Short videos cut 10x faster than real life — the brain gets tamed to only crave fast pacing"}, {"zh": "陪伴感", "en": "Companionship", "phonetic": "/kəmˈpænjənʃɪp/", "note_zh": "深夜手機螢幕的光，常常是最後一個還醒著陪你的東西", "note_en": "Late at night, the phone's glow is often the last thing still awake with you"}, {"zh": "存在感", "en": "Sense of existence", "phonetic": "/sens əv ɪɡˈzɪstəns/", "note_zh": "發限動、發貼文，是在向世界證明「我存在、我有想法」", "note_en": "Posting a story is a way of telling the world 'I exist, I have something to say'"}]}];
+const DOPA = {"id": "dopamine", "icon": "🧪", "zh": "多巴胺迴路", "en": "The Dopamine Loop", "phonetic": "/ðə ˈdoʊpəmiːn luːp/", "subtitle_zh": "成癮不是意志力薄弱，是大腦的化學迴路被劫持了", "subtitle_en": "Addiction isn't weak willpower — it's a brain circuit being hijacked", "intro_zh": "這個迴路一旦跑起來，會自我強化、越跑越快。理解這個迴路，才能知道要在哪一個點介入才有效。", "intro_en": "Once this loop starts running, it self-reinforces and speeds up. Understanding the loop tells you exactly where to intervene.", "loop_steps": [{"zh": "無聊", "en": "Boredom", "phonetic": "/ˈbɔːrdəm/", "explain_zh": "大腦偵測到「現在沒有刺激」，開始尋找刺激來源", "explain_en": "The brain detects 'no stimulation right now' and starts hunting for a source"}, {"zh": "滑手機", "en": "Pick up the phone", "phonetic": "/pɪk ʌp ðə foʊn/", "explain_zh": "手機是離你最近、成本最低的刺激來源", "explain_en": "The phone is the nearest, cheapest source of stimulation available"}, {"zh": "多巴胺", "en": "Dopamine release", "phonetic": "/ˈdoʊpəmiːn rɪˈliːs/", "explain_zh": "不是看到內容才釋放，是「期待」新內容的那一刻就先釋放了", "explain_en": "It's not released when you see content — it fires the moment you anticipate something new"}, {"zh": "快樂", "en": "Pleasure", "phonetic": "/ˈpleʒər/", "explain_zh": "短暫的愉悅感，但很快就會消退，留下空虛", "explain_en": "A brief rush of pleasure that fades fast, leaving emptiness behind"}, {"zh": "再滑手機", "en": "Scroll again", "phonetic": "/skroʊl əˈɡen/", "explain_zh": "為了補回剛剛消退的快樂，手指自動再次滑動", "explain_en": "To refill the pleasure that just faded, the thumb scrolls again automatically"}, {"zh": "成癮", "en": "Addiction", "phonetic": "/əˈdɪkʃən/", "explain_zh": "迴路重複千百次後，大腦把「滑手機」設成預設行為", "explain_en": "After thousands of loops, the brain sets 'scroll the phone' as the default behavior"}], "key_insight_zh": "多巴胺不是「快樂分子」，是「期待分子」。手機真正抓住你的，不是內容本身，是你永遠不知道下一條是什麼的那個「期待」。", "key_insight_en": "Dopamine isn't the 'pleasure molecule' — it's the 'anticipation molecule.' What really hooks you isn't the content itself, it's never knowing what's coming next."};
+const PRED = {"id": "predictive", "icon": "🔮", "zh": "預測編碼", "en": "Predictive Coding", "phonetic": "/prɪˈdɪktɪv ˈkoʊdɪŋ/", "subtitle_zh": "大腦學會了一個公式：不舒服的感覺 = 滑手機", "subtitle_en": "The brain learned one formula: discomfort = scroll the phone", "intro_zh": "大腦是一台預測機器，它會把重複出現的「狀態→行為」配對自動化。當無聊、壓力、焦慮、孤單都被綁定到同一個行為上，這個行為就會變成自動導航，不再需要思考。", "intro_en": "The brain is a prediction machine — it automates any 'state → behavior' pairing that repeats. Once boredom, stress, anxiety, and loneliness all get wired to the same behavior, that behavior goes on autopilot. No thinking required.", "pairs": [{"trigger_zh": "無聊", "trigger_en": "Boredom", "phonetic": "/ˈbɔːrdəm/", "action_zh": "滑手機", "action_en": "Scroll"}, {"trigger_zh": "壓力", "trigger_en": "Stress", "phonetic": "/stres/", "action_zh": "滑手機", "action_en": "Scroll"}, {"trigger_zh": "焦慮", "trigger_en": "Anxiety", "phonetic": "/æŋˈzaɪəti/", "action_zh": "滑手機", "action_en": "Scroll"}, {"trigger_zh": "孤單", "trigger_en": "Loneliness", "phonetic": "/ˈloʊnlinəs/", "action_zh": "滑手機", "action_en": "Scroll"}], "automation_zh": "習慣化 → 自動化", "automation_en": "Habituation → Automation", "automation_phonetic": "/ˌhəˌbɪtʃuəlaɪˈzeɪʃən tə ˌɔːtəmeɪˈʃeɪʃən/", "key_insight_zh": "這就是為什麼「不要滑手機」這句話沒有用——因為這四種狀態幾乎每天都會出現，而大腦已經把「滑手機」設成這四種狀態的唯一解法。要打破迴路，不是禁止行為，是要為每個觸發狀態，重新綁定一個新的行為。", "key_insight_en": "This is why 'just stop scrolling' never works — these four states show up almost every day, and the brain has already wired 'scroll' as the only solution to all of them. Breaking the loop isn't about banning the behavior. It's about rewiring a new response to each trigger."};
+const FREE = {"id": "free_energy", "icon": "🌀", "zh": "自由能視角", "en": "Free Energy View", "phonetic": "/friː ˈenərdʒi vjuː/", "subtitle_zh": "大腦最痛恨的不是壓力，是不確定", "subtitle_en": "What the brain hates most isn't stress — it's uncertainty", "intro_zh": "「自由能原理」說，大腦的終極目標是降低「驚訝」跟「不確定性」。考試考不好的恐懼、跟同學比較的壓力、看不清未來的迷茫——這些都是高濃度的不確定感。手機提供了一個立即、可預測、低成本的解藥。", "intro_en": "The Free Energy Principle says the brain's ultimate goal is minimizing surprise and uncertainty. Fear of failing a test, the pressure of comparing yourself to classmates, confusion about the future — these are all concentrated uncertainty. The phone offers an immediate, predictable, low-cost antidote.", "chain": [{"zh": "焦慮 / 不確定 / 壓力 / 害怕失敗 / 害怕比較 / 害怕未來", "en": "Anxiety / Uncertainty / Stress / Fear of failure / Fear of comparison / Fear of the future"}, {"zh": "滑手機", "en": "Scroll the phone"}, {"zh": "暫時舒服", "en": "Temporary relief"}, {"zh": "持續依賴", "en": "Ongoing dependence"}], "key_insight_zh": "手機之所以萬能，是因為它能瞬間把任何一種不確定感變成「已知」——已知接下來會看到什麼、已知會有什麼感覺。這種瞬間的確定感,大腦會上癮般地追求。", "key_insight_en": "The phone feels like a universal solution because it instantly converts any uncertainty into 'known' — you know what you'll see next, you know how it'll feel. The brain chases that instant certainty like an addiction."};
+const EVOL = {"id": "evolution", "icon": "📉", "zh": "演化視角", "en": "Evolution View", "phonetic": "/ˌevəˈluːʃən vjuː/", "subtitle_zh": "這不是一天發生的事，是一條向下的滑梯", "subtitle_en": "This didn't happen overnight — it's a slide, not a cliff", "intro_zh": "短影音不是突然讓你成癮，是一條清楚的演化路徑，一步一步把你從「看一下」變成「成績下降」。看懂這條路徑，才能知道要在哪一站下車。", "intro_en": "Short videos don't addict you all at once — there's a clear path, step by step, from 'just a quick look' to 'grades dropping.' See the path clearly, and you'll know exactly where to get off.", "chain": [{"zh": "短影音", "en": "Short-form video", "phonetic": "/ʃɔːrt-fɔːrm ˈvɪdioʊ/"}, {"zh": "習慣", "en": "Habit", "phonetic": "/ˈhæbɪt/"}, {"zh": "依賴", "en": "Dependence", "phonetic": "/dɪˈpendəns/"}, {"zh": "成癮", "en": "Addiction", "phonetic": "/əˈdɪkʃən/"}, {"zh": "專注力下降", "en": "Attention span shrinks", "phonetic": "/əˈtenʃən spæn ʃrɪŋks/"}, {"zh": "學習能力下降", "en": "Learning ability declines", "phonetic": "/ˈlɜːrnɪŋ əˈbɪlɪti dɪˈklaɪnz/"}, {"zh": "成績下降", "en": "Grades drop", "phonetic": "/ɡreɪdz drɒp/"}], "key_insight_zh": "越早期的階段，介入成本越低。在「習慣」階段處理，比在「成績下降」階段處理，省下10倍的力氣。", "key_insight_en": "The earlier the stage, the cheaper the intervention. Fixing it at the 'habit' stage costs ten times less effort than fixing it at the 'grades drop' stage."};
+const COMPLEX = {"id": "complex_system", "icon": "🕸️", "zh": "複雜系統", "en": "Complex System", "phonetic": "/kəmˈpleks ˈsɪstəm/", "subtitle_zh": "10個系統同時在拉扯，沒有單一原因，也沒有單一解法", "subtitle_en": "10 systems pulling at once — no single cause, no single fix", "intro_zh": "手機上癮從來不是「手機」一個變數造成的，是家庭、同儕、遊戲、社群媒體、演算法、睡眠、壓力、學習系統⋯⋯十個系統同時交互作用的結果。這也是為什麼單一手段（比如沒收手機）幾乎都失敗——你只動了一個節點，另外九個系統馬上把問題拉回原狀。", "intro_en": "Phone addiction is never caused by one variable called 'the phone.' It's family, peers, games, social media, the algorithm, sleep, stress, and the learning system — ten systems interacting at once. That's why single-lever fixes (like confiscating the phone) almost always fail — you moved one node, and the other nine pull the problem right back.", "items": [{"zh": "家庭", "en": "Family", "phonetic": "/ˈfæmɪli/"}, {"zh": "同儕", "en": "Peers", "phonetic": "/pɪərz/"}, {"zh": "手機", "en": "The phone itself", "phonetic": "/ðə foʊn ɪtˈself/"}, {"zh": "遊戲", "en": "Games", "phonetic": "/ɡeɪmz/"}, {"zh": "社群媒體", "en": "Social media", "phonetic": "/ˈsoʊʃəl ˈmiːdiə/"}, {"zh": "演算法", "en": "Algorithms", "phonetic": "/ˈælɡərɪðəmz/"}, {"zh": "睡眠", "en": "Sleep", "phonetic": "/sliːp/"}, {"zh": "壓力", "en": "Stress", "phonetic": "/stres/"}, {"zh": "情緒", "en": "Emotions", "phonetic": "/ɪˈmoʊʃənz/"}, {"zh": "學習系統", "en": "The learning system", "phonetic": "/ðə ˈlɜːrnɪŋ ˈsɪstəm/"}], "key_insight_zh": "面對複雜系統，正確的策略不是「找一個救世主解法」，是同時對幾個關鍵節點下手——這就是後面解決方案要做四面包抄的原因。", "key_insight_en": "Facing a complex system, the right strategy isn't 'find one silver-bullet fix' — it's hitting several key nodes at once. That's exactly why the solution section below attacks from four directions simultaneously."};
+const GAME = {"id": "game_theory", "icon": "⚔️", "zh": "賽局視角", "en": "Game Theory View", "phonetic": "/ɡeɪm ˈθɪəri vjuː/", "subtitle_zh": "你以為在跟手機戰鬥，其實是在跟全世界最厲害的AI團隊對打", "subtitle_en": "You think you're fighting your phone — you're actually fighting the smartest AI teams on Earth", "intro_zh": "這場仗從一開始就不公平。對面是數千名頂尖工程師、心理學家、神經科學家組成的團隊，他們的KPI就是讓你停不下來。光靠「我這次一定要克制」的意志力，去對抗一整個產業的精密設計，輸的機率非常高——這不是你不夠堅強，是賽局本身就不對等。", "intro_en": "This fight was never fair to begin with. On the other side: thousands of top engineers, psychologists, and neuroscientists whose entire KPI is keeping you from putting the phone down. Relying on 'I'll just have more willpower this time' to fight an entire industry's precision engineering — the odds are brutal. It's not that you're not strong enough. The game itself is rigged.", "left_zh": "學生", "left_en": "The Student", "left_icon": "🧑‍🎓", "right_items": [{"zh": "TikTok", "en": "TikTok"}, {"zh": "IG", "en": "Instagram"}, {"zh": "YouTube", "en": "YouTube"}, {"zh": "Threads", "en": "Threads"}, {"zh": "遊戲公司", "en": "Game companies"}, {"zh": "AI推薦系統", "en": "AI recommendation engines"}], "vs_zh": "VS", "vs_en": "VS", "key_insight_zh": "知道這是一場不對等的賽局，反而是解套的第一步——因為這代表問題不是你的人格缺陷，而是你需要更聰明的策略，而不是更多的自責。", "key_insight_en": "Knowing this is an unfair game is actually the first step out — because it means the problem isn't a character flaw. It means you need a smarter strategy, not more self-blame."};
+const SOL = {"id": "solutions", "icon": "🛠️", "zh": "解決方案", "en": "The Solution", "phonetic": "/ðə səˈluːʃən/", "subtitle_zh": "四面包抄，同時處理誘惑、樂趣、成就、目標", "subtitle_en": "Attack from four sides: temptation, fun, achievement, and purpose", "intro_zh": "因為手機上癮是一個複雜系統問題，解法也必須是系統性的。下面四大策略要同時進行，缺一個，另外三個的效果都會被打折。", "intro_en": "Because phone addiction is a complex system problem, the solution has to be systemic too. These four strategies need to run together — skip one, and the other three lose their power.", "strategies": [{"key": "reduce_temptation", "zh": "降低誘惑", "en": "Reduce Temptation", "phonetic": "/rɪˈdjuːs tempˈteɪʃən/", "icon": "🔇", "logic_zh": "意志力是有限的資源，最聰明的做法不是跟誘惑對抗，是讓誘惑從一開始就不出現。", "logic_en": "Willpower is a limited resource. The smartest move isn't fighting temptation — it's making sure temptation never shows up in the first place.", "items": [{"zh": "關通知", "en": "Turn off notifications", "phonetic": "/tɜːrn ɒf ˌnoʊtɪfɪˈkeɪʃənz/", "how_zh": "把所有非必要App的通知關掉，手機從「一直在叫你」變成「安靜的工具」", "how_en": "Turn off notifications for every non-essential app. The phone goes from 'constantly calling you' to a 'quiet tool'"}, {"zh": "黑白畫面", "en": "Switch to grayscale", "phonetic": "/swɪtʃ tə ˈɡreɪskeɪl/", "how_zh": "把螢幕設成黑白模式，App圖示瞬間失去吸引力，多巴胺的視覺誘因直接被砍半", "how_en": "Set your screen to grayscale. App icons instantly lose their pull — you cut the visual dopamine trigger in half"}, {"zh": "刪短影音", "en": "Delete short-video apps", "phonetic": "/dɪˈliːt ʃɔːrt-ˈvɪdioʊ æps/", "how_zh": "短影音是設計最精密的成癮產品，刪掉App比設定時間限制有效十倍", "how_en": "Short-video apps are the most precisely engineered addiction products. Deleting them works ten times better than setting a time limit"}, {"zh": "時間限制", "en": "Set time limits", "phonetic": "/set taɪm ˈlɪmɪts/", "how_zh": "用系統內建的螢幕使用時間功能，設定每個App的每日上限，到點直接鎖住", "how_en": "Use built-in screen time tools to cap each app's daily usage — when time's up, it locks automatically"}]}, {"key": "increase_real_fun", "zh": "增加現實樂趣", "en": "Increase Real-Life Fun", "phonetic": "/ɪnˈkriːs riːl-laɪf fʌn/", "icon": "🎯", "logic_zh": "禁止永遠輸給替代。如果現實世界沒有提供比手機更好的快樂來源，戒手機只是換一種痛苦。", "logic_en": "Prohibition always loses to substitution. If real life doesn't offer a better source of joy than the phone, quitting just trades one kind of pain for another.", "items": [{"zh": "運動", "en": "Exercise", "phonetic": "/ˈeksərsaɪz/", "how_zh": "運動產生的天然多巴胺跟腦內啡，是手機完全模仿不來的高品質快樂", "how_en": "The natural dopamine and endorphins from exercise are a quality of joy no phone can fake"}, {"zh": "社團", "en": "Clubs", "phonetic": "/klʌbz/", "how_zh": "在真實世界找到一群有共同興趣的人，歸屬感不再需要靠按讚數來證明", "how_en": "Find a group with shared interests in the real world — belonging no longer needs a like count to prove it"}, {"zh": "閱讀", "en": "Reading", "phonetic": "/ˈriːdɪŋ/", "how_zh": "讀一本真正吸引你的書，重新訓練大腦習慣「慢一點」的深度刺激", "how_en": "Read a book that genuinely hooks you — retrain the brain to enjoy a 'slower' kind of deep stimulation"}, {"zh": "朋友", "en": "Friends", "phonetic": "/frendz/", "how_zh": "面對面的對話，眼神接觸跟真實的笑聲，給的陪伴感比群組訊息深十倍", "how_en": "Face-to-face conversation, eye contact, real laughter — they deliver ten times the companionship of a group chat"}, {"zh": "挑戰", "en": "Challenges", "phonetic": "/ˈtʃælɪndʒɪz/", "how_zh": "給自己設一個有點難但做得到的挑戰，現實世界的「闖關感」其實比遊戲更上癮", "how_en": "Set yourself a challenge that's hard but doable — beating a real-life level is, weirdly, more addictive than a game"}]}, {"key": "increase_achievement", "zh": "增加成就感", "en": "Build a Sense of Achievement", "phonetic": "/bɪld ə sens əv əˈtʃiːvmənt/", "icon": "🏆", "logic_zh": "遊戲讓你30秒就有成就感，現實世界要好幾個月。解法是把現實世界的大目標切成像遊戲一樣的小關卡。", "logic_en": "Games give you achievement in 30 seconds; real life takes months. The fix is to chop real-life goals into game-like small levels.", "items": [{"zh": "每日任務", "en": "Daily quests", "phonetic": "/ˈdeɪli kwests/", "how_zh": "把今天要做的事變成像遊戲任務一樣的清單，完成一項就打勾", "how_en": "Turn today's to-dos into a quest list like a game — check one off as you finish"}, {"zh": "每日打卡", "en": "Daily check-ins", "phonetic": "/ˈdeɪli tʃek-ɪnz/", "how_zh": "連續打卡的天數會自己產生一種「不想中斷」的動力，跟遊戲連續登入獎勵是同一個機制", "how_en": "A streak of check-ins creates its own 'don't break it' momentum — same mechanism as a game's login streak reward"}, {"zh": "每日進步", "en": "Daily progress tracking", "phonetic": "/ˈdeɪli ˈprɒɡres ˈtrækɪŋ/", "how_zh": "記錄一個可以量化的小數字（背了幾個單字、讀了幾頁），看得到進步比看不到更有動力", "how_en": "Track one small measurable number (words memorized, pages read) — visible progress motivates far more than invisible progress"}, {"zh": "每日回饋", "en": "Daily feedback", "phonetic": "/ˈdeɪli ˈfiːdbæk/", "how_zh": "找一個人（家人、朋友、老師）每天給你一句具體的回饋，外部回饋補足遊戲裡「過關音效」的角色", "how_en": "Find someone — family, friend, teacher — to give you one specific piece of feedback daily. External feedback fills the role a game's 'level-up sound' plays"}]}, {"key": "build_life_goal", "zh": "建立人生目標", "en": "Build a Life Goal", "phonetic": "/bɪld ə laɪf ɡoʊl/", "icon": "🎓", "logic_zh": "這是四大策略裡最關鍵的一個——目標越清楚，手機就越不重要。沒有目標的人會用手機填滿時間，有目標的人會主動把時間搶回來。", "logic_en": "This is the most critical of the four strategies — the clearer the goal, the less the phone matters. People without goals let the phone fill their time. People with goals actively take their time back.", "items": [{"zh": "醫學系", "en": "Medical school", "phonetic": "/ˈmedɪkəl skuːl/", "how_zh": "想清楚「成為醫生」對你來說具體代表什麼樣的生活和意義", "how_en": "Get specific about what 'becoming a doctor' actually means for your life and purpose"}, {"zh": "牙醫系", "en": "Dental school", "phonetic": "/ˈdentəl skuːl/", "how_zh": "找到讓你願意為了它早起、願意為了它放下手機的那個畫面", "how_en": "Find the mental picture vivid enough to make you wake up early and put the phone down for it"}, {"zh": "藥學系", "en": "Pharmacy school", "phonetic": "/ˈfɑːrməsi skuːl/", "how_zh": "把大目標拆成這學期、這個月、這週要完成的具體小目標", "how_en": "Break the big goal into concrete smaller goals for this semester, this month, this week"}, {"zh": "AI工程師", "en": "AI engineer", "phonetic": "/eɪ aɪ ˌendʒɪˈnɪər/", "how_zh": "去看看這個領域真正的人在做什麼，讓目標從「想像」變成「看得到的路徑」", "how_en": "Look at what real people in this field actually do — turn the goal from 'imagination' into 'a visible path'"}, {"zh": "創業家", "en": "Entrepreneur", "phonetic": "/ˌɒntrəprəˈnɜːr/", "how_zh": "現在就可以開始的小型嘗試（擺攤、接案、做內容），讓夢想提前發生", "how_en": "Start a small version now — a market stall, freelance work, content creation — let the dream begin early"}, {"zh": "理想人生", "en": "An ideal life", "phonetic": "/ən aɪˈdɪəl laɪf/", "how_zh": "寫下5年後你想要的一天是怎麼過的，讓未來感變得具體可感", "how_en": "Write down what a single day, five years from now, would ideally look like — make the sense of future tangible"}]}]};
+const SUMMARY = {"id": "summary", "icon": "🧠", "zh": "建模大師總結", "en": "Model Master's Summary", "phonetic": "/ˈmɒdəl ˈmɑːstərz ˈsʌməri/", "equation_wrong_zh": "手機上癮", "equation_wrong_en": "Phone addiction", "neq": "≠", "equation_wrong_right_zh": "手機問題", "equation_wrong_right_en": "A phone problem", "equation_zh": "手機上癮", "equation_en": "Phone addiction", "eq": "=", "components": [{"zh": "成就感缺口", "en": "Achievement gap"}, {"zh": "認同感缺口", "en": "Validation gap"}, {"zh": "歸屬感缺口", "en": "Belonging gap"}, {"zh": "未來感缺口", "en": "Future-sense gap"}, {"zh": "多巴胺迴路", "en": "Dopamine loop"}, {"zh": "演算法控制", "en": "Algorithmic control"}], "solution_chain": [{"zh": "建立目標", "en": "Build a goal"}, {"zh": "建立成就", "en": "Build achievement"}, {"zh": "建立系統", "en": "Build a system"}, {"zh": "重新奪回注意力", "en": "Take your attention back"}], "closing_zh": "手機從來不是敵人，它只是一個太了解人性弱點的鏡子。真正的解法不是跟手機打仗，是把現實世界重新設計成一個值得你投入注意力的地方。", "closing_en": "The phone was never the enemy — it's just a mirror that knows human weakness too well. The real fix isn't a war against the phone. It's redesigning real life into something worth your attention."};
+const CLASSROOM = {"id": "classroom", "icon": "🏫", "zh": "國潮班級經營版", "en": "Classroom Management Edition", "phonetic": "/ˈklæsˌruːm ˈmænɪdʒmənt ˈedɪʃən/", "subtitle_zh": "給老師、給家長、給自己看的核心邏輯", "subtitle_en": "The core logic for teachers, parents, and yourself", "chain_blocks": [{"zh": "手機問題", "en": "The phone problem", "arrow": true}, {"zh": "不是紀律問題", "en": "isn't a discipline problem", "arrow": true}, {"zh": "而是人生目標問題", "en": "it's a life-purpose problem", "arrow": false}], "principles": [{"zh": "目標越模糊，手機越重要。", "en": "The blurrier the goal, the more the phone matters.", "phonetic": "/ðə ˈblɜːriər ðə ɡoʊl, ðə mɔːr ðə foʊn ˈmætərz/"}, {"zh": "目標越清楚，手機越不重要。", "en": "The clearer the goal, the less the phone matters.", "phonetic": "/ðə ˈklɪərər ðə ɡoʊl, ðə les ðə foʊn ˈmætərz/"}, {"zh": "沒有未來的人，活在短影音裡。", "en": "People without a future live inside short videos.", "phonetic": "/ˈpiːpl wɪˈðaʊt ə ˈfjuːtʃər lɪv ɪnˈsaɪd ʃɔːrt ˈvɪdioʊz/"}, {"zh": "看見未來的人，會開始管理自己的注意力。", "en": "People who can see their future start managing their own attention.", "phonetic": "/ˈpiːpl huː kæn siː ðeər ˈfjuːtʃər stɑːrt ˈmænɪdʒɪŋ ðeər oʊn əˈtenʃən/"}], "formula_wrong_zh": "手機管理", "formula_wrong_en": "Managing the phone", "wrong_op": "×", "formula_wrong_right_zh": "沒收手機", "formula_wrong_right_en": "confiscating the phone", "formula_zh": "手機管理", "formula_en": "Managing the phone", "eq": "=", "formula_components": [{"zh": "建立夢想", "en": "Building a dream"}, {"zh": "建立成就", "en": "Building achievement"}, {"zh": "建立歸屬", "en": "Building belonging"}, {"zh": "建立系統", "en": "Building a system"}]};
+const STRAT10 = [{"num": 1, "zh": "關掉所有非必要通知", "en": "Turn off all non-essential notifications", "phonetic": "/tɜːrn ɒf ɔːl nɒn-ɪˈsenʃəl ˌnoʊtɪfɪˈkeɪʃənz/", "category_zh": "降低誘惑", "category_en": "Reduce Temptation", "why_zh": "每一個通知都是設計好的「召喚」，關掉它，誘惑從源頭消失", "why_en": "Every notification is an engineered 'summon.' Turn it off and the temptation disappears at the source"}, {"num": 2, "zh": "把短影音類App直接刪掉", "en": "Delete short-video apps entirely", "phonetic": "/dɪˈliːt ʃɔːrt-ˈvɪdioʊ æps ɪnˈtaɪərli/", "category_zh": "降低誘惑", "category_en": "Reduce Temptation", "why_zh": "短影音是設計最精密的成癮產品，刪除比設限有效十倍", "why_en": "Short-form video is the most precisely engineered addiction product — deletion beats limits tenfold"}, {"num": 3, "zh": "把螢幕設成黑白模式", "en": "Switch your screen to grayscale", "phonetic": "/swɪtʃ jɔːr skriːn tə ˈɡreɪskeɪl/", "category_zh": "降低誘惑", "category_en": "Reduce Temptation", "why_zh": "色彩是多巴胺的視覺鉤子,去掉顏色,App瞬間沒那麼吸引人", "why_en": "Color is dopamine's visual hook — strip it away and apps instantly lose their pull"}, {"num": 4, "zh": "找一件運動每天做20分鐘", "en": "Pick one sport and do it 20 minutes daily", "phonetic": "/pɪk wʌn spɔːrt ænd duː ɪt ˈtwenti ˈmɪnɪts ˈdeɪli/", "category_zh": "增加現實樂趣", "category_en": "Increase Real Fun", "why_zh": "運動產生的天然快樂是手機完全模仿不來的高品質多巴胺", "why_en": "The natural joy from exercise is a quality of dopamine no phone can fake"}, {"num": 5, "zh": "加入一個真實世界的社團或團體", "en": "Join one real-world club or group", "phonetic": "/dʒɔɪn wʌn riːl-wɜːrld klʌb ɔːr ɡruːp/", "category_zh": "增加現實樂趣", "category_en": "Increase Real Fun", "why_zh": "歸屬感一旦在現實裡被滿足，手機群組的重要性自然下降", "why_en": "Once belonging is satisfied in real life, the group chat naturally matters less"}, {"num": 6, "zh": "把大目標拆成每日可打勾的任務", "en": "Break big goals into daily checkable tasks", "phonetic": "/breɪk bɪɡ ɡoʊlz ˈɪntə ˈdeɪli ˈtʃekəbl tæsks/", "category_zh": "增加成就感", "category_en": "Build Achievement", "why_zh": "現實世界的成就感可以像遊戲一樣設計,只要切得夠小、夠快兌現", "why_en": "Real-life achievement can be designed like a game — just chop it small enough to pay off fast"}, {"num": 7, "zh": "找一個人每天給你具體回饋", "en": "Find someone to give you specific feedback daily", "phonetic": "/faɪnd ˈsʌmwʌn tə ɡɪv juː spəˈsɪfɪk ˈfiːdbæk ˈdeɪli/", "category_zh": "增加成就感", "category_en": "Build Achievement", "why_zh": "外部回饋補上遊戲裡『過關音效』的角色,讓努力被看見", "why_en": "External feedback fills the role of a game's 'level-up sound' — it makes effort visible"}, {"num": 8, "zh": "寫下一個具體到可以想像畫面的目標", "en": "Write a goal specific enough to picture vividly", "phonetic": "/raɪt ə ɡoʊl spəˈsɪfɪk ɪˈnʌf tə ˈpɪktʃər ˈvɪvɪdli/", "category_zh": "建立人生目標", "category_en": "Build a Life Goal", "why_zh": "模糊的目標沒有拉力,具體到能想像畫面的目標才有真正的牽引力", "why_en": "A vague goal has no pull — only a goal vivid enough to picture has real gravitational force"}, {"num": 9, "zh": "把手機放在另一個房間睡覺", "en": "Charge your phone in a different room at night", "phonetic": "/tʃɑːrdʒ jɔːr foʊn ɪn ə ˈdɪfərənt ruːm æt naɪt/", "category_zh": "降低誘惑", "category_en": "Reduce Temptation", "why_zh": "距離是最便宜的意志力,手機不在手邊,熬夜滑手機的機會直接歸零", "why_en": "Distance is the cheapest form of willpower — out of reach means zero chance of a late-night scroll"}, {"num": 10, "zh": "每週檢查一次螢幕使用時間報告", "en": "Check your screen time report once a week", "phonetic": "/tʃek jɔːr skriːn taɪm rɪˈpɔːrt wʌns ə wiːk/", "category_zh": "建立系統", "category_en": "Build a System", "why_zh": "沒有回饋的系統不會進步,看見真實數字才會產生改變的動力", "why_en": "A system without feedback never improves — seeing the real numbers is what sparks the will to change"}];
+const QUOTES10 = [{"num": 1, "zh": "手機不是你的敵人，它只是太了解你的弱點。", "en": "The phone isn't your enemy — it just knows your weaknesses too well.", "phonetic": "/ðə foʊn ɪznt jɔːr ˈenəmi — ɪt dʒʌst noʊz jɔːr ˈwiːknəsɪz tuː wel/"}, {"num": 2, "zh": "你不是輸給手機，你是輸給一整個沒有目標的下午。", "en": "You don't lose to the phone. You lose to an afternoon with no purpose.", "phonetic": "/juː doʊnt luːz tə ðə foʊn. juː luːz tə ən ˈæftərnuːn wɪð noʊ ˈpɜːrpəs/"}, {"num": 3, "zh": "目標越模糊，手機越重要；目標越清楚，手機越不重要。", "en": "The blurrier your goal, the more the phone matters. The clearer your goal, the less it does.", "phonetic": "/ðə ˈblɜːriər jɔːr ɡoʊl, ðə mɔːr ðə foʊn ˈmætərz. ðə ˈklɪərər jɔːr ɡoʊl, ðə les ɪt dʌz/"}, {"num": 4, "zh": "沒有未來感的人，才會把所有時間交給15秒的影片。", "en": "Only someone with no sense of future hands all their time to a 15-second video.", "phonetic": "/ˈoʊnli ˈsʌmwʌn wɪð noʊ sens əv ˈfjuːtʃər hændz ɔːl ðeər taɪm tə ə fɪfˈtiːn-ˈsekənd ˈvɪdioʊ/"}, {"num": 5, "zh": "你不是沒有意志力，你是在跟全世界最聰明的AI團隊單打。", "en": "You don't lack willpower — you're in a one-on-one match against the smartest AI teams on Earth.", "phonetic": "/juː doʊnt læk ˈwɪlpaʊər — jɔːr ɪn ə wʌn-ɒn-wʌn mætʃ əˈɡenst ðə ˈsmɑːrtɪst eɪ aɪ tiːmz ɒn ɜːrθ/"}, {"num": 6, "zh": "戒手機不是少做一件事，是多活出一個人生。", "en": "Quitting the phone isn't doing less — it's living more of a life.", "phonetic": "/ˈkwɪtɪŋ ðə foʊn ɪznt ˈduːɪŋ les — ɪts ˈlɪvɪŋ mɔːr əv ə laɪf/"}, {"num": 7, "zh": "現實世界不會自動好玩，但你可以把它設計成好玩。", "en": "Real life doesn't get fun by itself — but you can design it to be.", "phonetic": "/riːl laɪf dʌznt ɡet fʌn baɪ ɪtˈself — bʌt juː kæn dɪˈzaɪn ɪt tə biː/"}, {"num": 8, "zh": "每一次忍住不滑手機，都是在跟你的大腦重新談判。", "en": "Every time you resist the scroll, you're renegotiating with your own brain.", "phonetic": "/ˈevri taɪm juː rɪˈzɪst ðə skroʊl, jɔːr riːnɪˌɡoʊʃiˈeɪtɪŋ wɪð jɔːr oʊn breɪn/"}, {"num": 9, "zh": "看見未來的人，會開始管理自己的注意力。", "en": "People who can see their future start managing their own attention.", "phonetic": "/ˈpiːpl huː kæn siː ðeər ˈfjuːtʃər stɑːrt ˈmænɪdʒɪŋ ðeər oʊn əˈtenʃən/"}, {"num": 10, "zh": "手機管理不是沒收，是幫你把人生的主導權拿回來。", "en": "Managing your phone isn't confiscation — it's taking back the steering wheel of your life.", "phonetic": "/ˈmænɪdʒɪŋ jɔːr foʊn ɪznt ˌkɒnfɪˈskeɪʃən — ɪts ˈteɪkɪŋ bæk ðə ˈstɪərɪŋ wiːl əv jɔːr laɪf/"}];
+
+function go(id){ document.querySelector(id)?.scrollIntoView({behavior:'smooth'}) }
+function speak(text){
+  if(!('speechSynthesis' in window)) return;
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang='en-US'; u.rate=0.85;
+  speechSynthesis.cancel();
+  speechSynthesis.speak(u);
+}
+function esc(s){ return (s||'').replace(/'/g,"\\'") }
+
+// Build the full perspective list: 4 simple ones + 7 special flow-type ones
+const ALL_PERSPECTIVES = [
+  {type:'items', data: PERSP1[0]},
+  {type:'items', data: PERSP1[1]},
+  {type:'items', data: PERSP1[2]},
+  {type:'items', data: PERSP1[3]},
+  {type:'loop', data: DOPA},
+  {type:'pairs', data: PRED},
+  {type:'chain', data: FREE},
+  {type:'chain', data: EVOL},
+  {type:'web', data: COMPLEX},
+  {type:'vs', data: GAME},
+];
+
+const pg = document.getElementById('persp-grid');
+ALL_PERSPECTIVES.forEach((p,i)=>{
+  const d = p.data;
+  const c = document.createElement('div');
+  c.className='persp-card';
+  c.innerHTML=`<div class="pc-icon">${d.icon}</div><div class="pc-zh">${d.zh}</div><div class="pc-en">${d.en}</div>`;
+  c.onclick=()=>{
+    document.querySelectorAll('.persp-card').forEach(x=>x.classList.remove('sel'));
+    c.classList.add('sel');
+    renderPerspective(p);
+  };
+  pg.appendChild(c);
+});
+
+function keyInsightHtml(d){
+  if(!d.key_insight_zh) return '';
+  return `<div class="key-insight">
+    <div class="label">💡 關鍵洞察 / Key Insight</div>
+    <div class="zh">${d.key_insight_zh}</div>
+    <div class="en">${d.key_insight_en}</div>
+  </div>`;
+}
+
+function renderPerspective(p){
+  const panel = document.getElementById('persp-panel');
+  panel.className='persp-panel show';
+  const d = p.data;
+  let bodyHtml = '';
+
+  if(p.type === 'items'){
+    bodyHtml = `<div class="item-grid">` + d.items.map(it=>`
+      <div class="item-card" onclick="this.classList.toggle('open')">
+        <div class="ic-zh">${it.zh}</div>
+        <div class="ic-en">${it.en}</div>
+        <div class="ic-note">
+          <div>${it.note_zh}</div>
+          <div class="en">${it.note_en}</div>
+          <button class="speak-btn" onclick="event.stopPropagation();speak('${esc(it.en)}')">🔊 ${it.en}</button>
+        </div>
+      </div>`).join('') + `</div>`;
+  }
+
+  else if(p.type === 'loop'){
+    bodyHtml = `<div class="flow-chain">` + d.loop_steps.map((s,i)=>`
+      <div class="fc-step ${i===d.loop_steps.length-1?'final':''}">
+        <div class="fc-zh">${s.zh}</div>
+        <div class="fc-en">${s.en}</div>
+        <div class="fc-explain">${s.explain_zh}</div>
+        <button class="speak-btn" onclick="speak('${esc(s.en)}')">🔊</button>
+      </div>
+      ${i<d.loop_steps.length-1 ? '<div class="fc-arrow">→</div>' : ''}
+    `).join('') + `</div>` + keyInsightHtml(d);
+  }
+
+  else if(p.type === 'pairs'){
+    bodyHtml = `<div class="pair-grid">` + d.pairs.map(pr=>`
+      <div class="pair-card">
+        <div class="pair-trigger">${pr.trigger_zh}<br><span style="font-size:11px;font-weight:400">${pr.trigger_en}</span></div>
+        <div class="pair-arrow">→</div>
+        <div class="pair-action">${pr.action_zh} / ${pr.action_en}</div>
+        <button class="speak-btn" onclick="speak('${esc(pr.trigger_en+' leads to scroll')}')">🔊</button>
+      </div>`).join('') + `</div>
+      <div class="flow-chain" style="margin-top:8px">
+        <div class="fc-step final">
+          <div class="fc-zh">${d.automation_zh}</div>
+          <div class="fc-en">${d.automation_en}</div>
+        </div>
+      </div>` + keyInsightHtml(d);
+  }
+
+  else if(p.type === 'chain'){
+    bodyHtml = `<div class="flow-chain">` + d.chain.map((c,i)=>`
+      <div class="fc-step ${i===d.chain.length-1?'final':''}">
+        <div class="fc-zh">${c.zh}</div>
+        <div class="fc-en">${c.en}</div>
+        ${c.phonetic ? '<button class="speak-btn" onclick="speak(\''+esc(c.en)+'\')">🔊</button>' : ''}
+      </div>
+      ${i<d.chain.length-1 ? '<div class="fc-arrow">→</div>' : ''}
+    `).join('') + `</div>` + keyInsightHtml(d);
+  }
+
+  else if(p.type === 'web'){
+    bodyHtml = `<div class="web-grid">` + d.items.map(it=>`
+      <div class="web-item" onclick="speak('${esc(it.en)}')" style="cursor:pointer">
+        ${it.zh}<span class="en">${it.en}</span>
+      </div>`).join('') + `</div>` + keyInsightHtml(d);
+  }
+
+  else if(p.type === 'vs'){
+    bodyHtml = `<div class="vs-layout">
+      <div class="vs-left">
+        <div class="icon">${d.left_icon}</div>
+        <div class="zh">${d.left_zh}<br><span style="font-size:11px">${d.left_en}</span></div>
+      </div>
+      <div class="vs-mid">${d.vs_zh}</div>
+      <div class="vs-right">${d.right_items.map(r=>`
+        <div class="vs-item" onclick="speak('${esc(r.en)}')" style="cursor:pointer">${r.zh}<br>${r.en}</div>`).join('')}
+      </div>
+    </div>` + keyInsightHtml(d);
+  }
+
+  panel.innerHTML = `
+    <div class="pp-header">
+      <div class="pp-title">${d.icon} ${d.zh}</div>
+      <div class="pp-en">${d.en}</div>
+      <div class="pp-subtitle">${d.subtitle_zh||''}</div>
+      <div class="pp-subtitle-en">${d.subtitle_en||''}</div>
+      <div class="pp-intro">
+        <div>${d.intro_zh||''}</div>
+        <div class="en">${d.intro_en||''}</div>
+      </div>
+    </div>
+    <div class="pp-body">${bodyHtml}</div>`;
+
+  panel.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+// ---- SOLUTIONS SECTION ----
+document.getElementById('sol-title').textContent = SOL.zh + ' / ' + SOL.en;
+document.getElementById('sol-intro').innerHTML = SOL.intro_zh + '<br><span style="color:var(--ink3);font-style:italic">' + SOL.intro_en + '</span>';
+
+const stratTabs = document.getElementById('strat-tabs');
+const stratContents = document.getElementById('strat-contents');
+SOL.strategies.forEach((s,i)=>{
+  const tab = document.createElement('button');
+  tab.className = 'strat-tab' + (i===0?' act':'');
+  tab.innerHTML = `${s.icon} ${s.zh}`;
+  tab.onclick = ()=>{
+    document.querySelectorAll('.strat-tab').forEach(t=>t.classList.remove('act'));
+    document.querySelectorAll('.strat-content').forEach(c=>c.classList.remove('show'));
+    tab.classList.add('act');
+    document.getElementById('strat-content-'+i).classList.add('show');
+  };
+  stratTabs.appendChild(tab);
+
+  const content = document.createElement('div');
+  content.className = 'strat-content' + (i===0?' show':'');
+  content.id = 'strat-content-'+i;
+  const itemsHtml = s.items.map(it=>`
+    <div class="sub-item-card">
+      <div class="sub-item-zh">${it.zh}</div>
+      <div class="sub-item-en">${it.en}</div>
+      <button class="speak-btn" onclick="speak('${esc(it.en)}')">🔊</button>
+      <div class="sub-item-how">
+        <div>${it.how_zh}</div>
+        <div class="en">${it.how_en}</div>
+      </div>
+    </div>`).join('');
+  content.innerHTML = `
+    <div class="strat-logic">
+      <div>${s.logic_zh}</div>
+      <div class="en">${s.logic_en}</div>
+    </div>
+    <div class="sub-item-grid">${itemsHtml}</div>`;
+  stratContents.appendChild(content);
+});
+
+// ---- 10 STRATEGIES ----
+const s10list = document.getElementById('strat10-list');
+STRAT10.forEach(s=>{
+  s10list.innerHTML += `
+    <div class="strat10-item">
+      <div class="s10-num">${s.num}</div>
+      <div>
+        <div class="s10-zh">${s.zh}</div>
+        <div class="s10-en">${s.en} <button class="speak-btn" onclick="speak('${esc(s.en)}')">🔊</button></div>
+        <span class="s10-cat">${s.category_zh} / ${s.category_en}</span>
+        <div class="s10-why">
+          <div>💡 ${s.why_zh}</div>
+          <div class="en">${s.why_en}</div>
+        </div>
+      </div>
+    </div>`;
+});
+
+// ---- 10 QUOTES ----
+const q10list = document.getElementById('quote10-list');
+QUOTES10.forEach(q=>{
+  q10list.innerHTML += `
+    <div class="quote10-item" onclick="speak('${esc(q.en)}')" title="點擊聽發音">
+      <div class="q10-num">${String(q.num).padStart(2,'0')}</div>
+      <div>
+        <div class="q10-zh">${q.zh}</div>
+        <div class="q10-en">${q.en}</div>
+      </div>
+    </div>`;
+});
+
+// ---- SUMMARY ----
+document.getElementById('summary-title').textContent = SUMMARY.zh + ' / ' + SUMMARY.en;
+const compHtml = SUMMARY.components.map(c=>`<div class="eq-comp">${c.zh}<span class="en">${c.en}</span></div>`).join('');
+const chainHtml = SUMMARY.solution_chain.map((c,i)=>`
+  <div class="sc-step">${c.zh}<span class="en">${c.en}</span></div>
+  ${i<SUMMARY.solution_chain.length-1 ? '<span style="color:var(--green);font-weight:900">→</span>' : ''}
+`).join('');
+document.getElementById('summary-content').innerHTML = `
+  <div class="eq-box">
+    <div class="eq-wrong">
+      <div class="eq-tag primary">${SUMMARY.equation_wrong_zh}<br><span style="font-size:11px;font-weight:400">${SUMMARY.equation_wrong_en}</span></div>
+      <div class="eq-sym">${SUMMARY.neq}</div>
+      <div class="eq-tag alt">${SUMMARY.equation_wrong_right_zh}<br><span style="font-size:11px;font-weight:400">${SUMMARY.equation_wrong_right_en}</span></div>
+    </div>
+    <div class="eq-main">
+      <div class="eq-tag primary">${SUMMARY.equation_zh}<br><span style="font-size:11px;font-weight:400">${SUMMARY.equation_en}</span></div>
+      <div class="eq-sym">${SUMMARY.eq}</div>
+    </div>
+    <div class="eq-components">${compHtml}</div>
+    <div class="solution-chain">${chainHtml}</div>
+  </div>
+  <div class="closing-box">
+    <div>${SUMMARY.closing_zh}</div>
+    <div class="en">${SUMMARY.closing_en}</div>
+  </div>`;
+
+// ---- CLASSROOM EDITION ----
+document.getElementById('classroom-title').textContent = CLASSROOM.zh + ' / ' + CLASSROOM.en;
+document.getElementById('classroom-sub').innerHTML = CLASSROOM.subtitle_zh + '<br><span style="color:var(--ink3);font-style:italic">' + CLASSROOM.subtitle_en + '</span>';
+const cbHtml = CLASSROOM.chain_blocks.map((b,i)=>`
+  <div class="cb-block">${b.zh}<span class="en">${b.en}</span></div>
+  ${b.arrow ? '<span style="color:var(--rose);font-size:18px;font-weight:900">↓</span>' : ''}
+`).join('');
+const principleHtml = CLASSROOM.principles.map(p=>`
+  <div class="principle-item" onclick="speak('${esc(p.en)}')" style="cursor:pointer">
+    <div class="zh">${p.zh}</div>
+    <div class="en">${p.en}</div>
+  </div>`).join('');
+const fcompHtml = CLASSROOM.formula_components.map(c=>`<div class="eq-comp">${c.zh}<span class="en">${c.en}</span></div>`).join('');
+document.getElementById('classroom-content').innerHTML = `
+  <div class="chain-blocks">${cbHtml}</div>
+  <div class="principle-list">${principleHtml}</div>
+  <div class="eq-box">
+    <div class="eq-wrong">
+      <div class="eq-tag primary">${CLASSROOM.formula_wrong_zh}<br><span style="font-size:11px;font-weight:400">${CLASSROOM.formula_wrong_en}</span></div>
+      <div class="eq-sym">${CLASSROOM.wrong_op}</div>
+      <div class="eq-tag alt">${CLASSROOM.formula_wrong_right_zh}<br><span style="font-size:11px;font-weight:400">${CLASSROOM.formula_wrong_right_en}</span></div>
+    </div>
+    <div class="eq-main">
+      <div class="eq-tag primary">${CLASSROOM.formula_zh}<br><span style="font-size:11px;font-weight:400">${CLASSROOM.formula_en}</span></div>
+      <div class="eq-sym">${CLASSROOM.eq}</div>
+    </div>
+    <div class="eq-components">${fcompHtml}</div>
+  </div>`;
+
+// Auto-open first perspective
+setTimeout(()=>{ document.querySelector('.persp-card')?.click(); }, 100);
+</script>
+</body>
+</html>
